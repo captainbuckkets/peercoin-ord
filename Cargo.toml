@@ -1,12 +1,12 @@
 [package]
 name = "ord"
-description = "◉ Ordinal wallet and block explorer"
+description = "◉ Ordinal wallet and block explorer for Peercoin"
 version = "0.11.0"
 license = "CC0-1.0"
 edition = "2021"
 autotests = false
-homepage = "https://github.com/ordinals/ord"
-repository = "https://github.com/ordinals/ord"
+homepage = "https://github.com/captainbuckkets/peercoin-ord"
+repository = "https://github.com/captainbuckkets/peercoin-ord"
 autobins = false
 rust-version = "1.67"
 
@@ -42,7 +42,8 @@ mime = "0.3.16"
 mime_guess = "2.0.4"
 miniscript = "10.0.0"
 mp4 = "0.14.0"
-ord-bitcoincore-rpc = "0.17.1"
+# ord-bitcoincore-rpc = "0.17.1"
+bitcoincore-rpc = "0.17.1"
 redb = "1.0.5"
 regex = "1.6.0"
 rss = "2.0.1"
