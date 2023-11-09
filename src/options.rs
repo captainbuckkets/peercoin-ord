@@ -7,9 +7,9 @@ use {super::*, bitcoincore_rpc::Auth};
     .args(&["chain_argument", "signet", "regtest", "testnet"]),
 ))]
 pub(crate) struct Options {
-  #[arg(long, help = "Load Bitcoin Core data dir from <BITCOIN_DATA_DIR>.")]
-  pub(crate) bitcoin_data_dir: Option<PathBuf>,
-  #[arg(long, help = "Authenticate to Bitcoin Core RPC with <RPC_PASS>.")]
+  #[arg(long, help = "Load Peercoin Core data dir from <PEERCOIN_DATA_DIR>.")]
+  pub(crate) peercoin_data_dir: Option<PathBuf>,
+  #[arg(long, help = "Authenticate to Peercoin Core RPC with <RPC_PASS>.")]
   pub(crate) bitcoin_rpc_pass: Option<String>,
   #[arg(long, help = "Authenticate to Bitcoin Core RPC as <RPC_USER>.")]
   pub(crate) bitcoin_rpc_user: Option<String>,
@@ -24,7 +24,7 @@ pub(crate) struct Options {
   pub(crate) config: Option<PathBuf>,
   #[arg(long, help = "Load configuration from <CONFIG_DIR>.")]
   pub(crate) config_dir: Option<PathBuf>,
-  #[arg(long, help = "Load Bitcoin Core RPC cookie file from <COOKIE_FILE>.")]
+  #[arg(long, help = "Load Peercoin Core RPC cookie file from <COOKIE_FILE>.")]
   pub(crate) cookie_file: Option<PathBuf>,
   #[arg(long, help = "Store index in <DATA_DIR>.")]
   pub(crate) data_dir: Option<PathBuf>,
@@ -51,7 +51,7 @@ pub(crate) struct Options {
   pub(crate) index_sats: bool,
   #[arg(long, short, help = "Use regtest. Equivalent to `--chain regtest`.")]
   pub(crate) regtest: bool,
-  #[arg(long, help = "Connect to Bitcoin Core RPC at <RPC_URL>.")]
+  #[arg(long, help = "Connect to Peercoin Core RPC at <RPC_URL>.")]
   pub(crate) rpc_url: Option<String>,
   #[arg(long, short, help = "Use signet. Equivalent to `--chain signet`.")]
   pub(crate) signet: bool,
@@ -107,16 +107,16 @@ impl Options {
       return Ok(cookie_file.clone());
     }
 
-    let path = if let Some(bitcoin_data_dir) = &self.bitcoin_data_dir {
-      bitcoin_data_dir.clone()
+    let path = if let Some(peercoin_data_dir) = &self.peercoin_data_dir {
+      peercoin_data_dir.clone()
     } else if cfg!(target_os = "linux") {
       dirs::home_dir()
         .ok_or_else(|| anyhow!("failed to get cookie file path: could not get home dir"))?
-        .join(".bitcoin")
+        .join(".peercoin")
     } else {
       dirs::data_dir()
         .ok_or_else(|| anyhow!("failed to get cookie file path: could not get data dir"))?
-        .join("Bitcoin")
+        .join("Peercoin")
     };
 
     let path = self.chain().join_with_data_dir(&path);
@@ -210,7 +210,7 @@ impl Options {
 
     let auth = self.auth()?;
 
-    log::info!("Connecting to Bitcoin Core at {}", self.rpc_url());
+    log::info!("Connecting to Peercoin Core at {}", self.rpc_url());
 
     if let Auth::CookieFile(cookie_file) = &auth {
       log::info!(
@@ -220,20 +220,20 @@ impl Options {
     }
 
     let client = Client::new(&rpc_url, auth)
-      .with_context(|| format!("failed to connect to Bitcoin Core RPC at {rpc_url}"))?;
+      .with_context(|| format!("failed to connect to Peercoin Core RPC at {rpc_url}"))?;
 
     let rpc_chain = match client.get_blockchain_info()?.chain.as_str() {
       "main" => Chain::Mainnet,
       "test" => Chain::Testnet,
       "regtest" => Chain::Regtest,
       "signet" => Chain::Signet,
-      other => bail!("Bitcoin RPC server on unknown chain: {other}"),
+      other => bail!("Peercoin RPC server on unknown chain: {other}"),
     };
 
     let ord_chain = self.chain();
 
     if rpc_chain != ord_chain {
-      bail!("Bitcoin RPC server is on {rpc_chain} but ord is on {ord_chain}");
+      bail!("Peercoin RPC server is on {rpc_chain} but ord is on {ord_chain}");
     }
 
     Ok(client)
@@ -242,7 +242,8 @@ impl Options {
   pub(crate) fn bitcoin_rpc_client_for_wallet_command(&self, create: bool) -> Result<Client> {
     let client = self.bitcoin_rpc_client()?;
 
-    const MIN_VERSION: usize = 240000;
+    // This will end up being 130000 for Peercoin Core 0.13.0
+    const MIN_VERSION: usize = 130000; // Previous was 240000 for bitcoin core and that was when ordinals was released
 
     let bitcoin_version = client.version()?;
     if bitcoin_version < MIN_VERSION {
@@ -253,6 +254,7 @@ impl Options {
       );
     }
 
+    // Potentially there is a macro here?
     if !create {
       if !client.list_wallets()?.contains(&self.wallet) {
         client.load_wallet(&self.wallet)?;
@@ -322,7 +324,7 @@ mod tests {
   fn use_default_network() {
     let arguments = Arguments::try_parse_from(["ord", "index", "update"]).unwrap();
 
-    assert_eq!(arguments.options.rpc_url(), "127.0.0.1:8332/wallet/ord");
+    assert_eq!(arguments.options.rpc_url(), "127.0.0.1:9901/wallet/ord");
 
     assert!(arguments
       .options
@@ -362,11 +364,11 @@ mod tests {
       .to_string();
 
     assert!(cookie_file.ends_with(if cfg!(target_os = "linux") {
-      "/.bitcoin/.cookie"
+      "/.peercoin/.cookie"
     } else if cfg!(windows) {
-      r"\Bitcoin\.cookie"
+      r"\Peercoin\.cookie"
     } else {
-      "/Bitcoin/.cookie"
+      "/Peercoin/.cookie"
     }))
   }
 
@@ -383,11 +385,11 @@ mod tests {
       .to_string();
 
     assert!(cookie_file.ends_with(if cfg!(target_os = "linux") {
-      "/.bitcoin/signet/.cookie"
+      "/.peercoin/signet/.cookie"
     } else if cfg!(windows) {
-      r"\Bitcoin\signet\.cookie"
+      r"\Peercoin\signet\.cookie"
     } else {
-      "/Bitcoin/signet/.cookie"
+      "/Peercoin/signet/.cookie"
     }));
   }
 
@@ -395,7 +397,7 @@ mod tests {
   fn cookie_file_defaults_to_bitcoin_data_dir() {
     let arguments = Arguments::try_parse_from([
       "ord",
-      "--bitcoin-data-dir=foo",
+      "--peercoin-data-dir=foo",
       "--chain=signet",
       "index",
       "update",
@@ -548,7 +550,7 @@ mod tests {
 
     assert_eq!(
       options.bitcoin_rpc_client().unwrap_err().to_string(),
-      "Bitcoin RPC server is on testnet but ord is on mainnet"
+      "Peercoin RPC server is on testnet but ord is on mainnet"
     );
   }
 
@@ -782,12 +784,12 @@ mod tests {
   #[test]
   fn auth_with_cookie_file() {
     let options = Options {
-      cookie_file: Some("/var/lib/Bitcoin/.cookie".into()),
+      cookie_file: Some("/var/lib/Peercoin/.cookie".into()),
       ..Default::default()
     };
     assert_eq!(
       options.auth().unwrap(),
-      Auth::CookieFile("/var/lib/Bitcoin/.cookie".into())
+      Auth::CookieFile("/var/lib/Peercoin/.cookie".into())
     );
   }
 
