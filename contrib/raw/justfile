@@ -21,4 +21,4 @@ sign WALLET_NAME:
   peercoin-cli -rpcwallet={{WALLET_NAME}} signrawtransactionwithwallet `cat raw.hex` > signed.json
 
 send:
-  peerccoin-cli sendrawtransaction `cat signed.json | jq '.hex' --raw-output`
+  peercoin-cli sendrawtransaction `cat signed.json | jq '.hex' --raw-output`
