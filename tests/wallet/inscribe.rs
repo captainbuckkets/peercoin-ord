@@ -63,12 +63,12 @@ fn metaprotocol_appears_on_inscription_page() {
 
 #[test]
 fn inscribe_fails_if_bitcoin_core_is_too_old() {
-  let rpc_server = test_bitcoincore_rpc::builder().version(230000).build();
+  let rpc_server = test_bitcoincore_rpc::builder().version(130000).build();
 
   CommandBuilder::new("wallet inscribe --file hello.txt --fee-rate 1")
     .write("hello.txt", "HELLOWORLD")
     .expected_exit_code(1)
-    .expected_stderr("error: Bitcoin Core 24.0.0 or newer required, current version is 23.0.0\n")
+    .expected_stderr("error: Peercoin Core 13.0.0 or newer required\n")
     .rpc_server(&rpc_server)
     .run_and_extract_stdout();
 }
