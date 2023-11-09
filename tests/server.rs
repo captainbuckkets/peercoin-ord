@@ -62,7 +62,7 @@ fn inscription_page() {
   <dt>id</dt>
   <dd class=monospace>{inscription}</dd>
   <dt>address</dt>
-  <dd class=monospace>bc1.*</dd>
+  <dd class=monospace>pc.*</dd>
   <dt>output value</dt>
   <dd>10000</dd>
   <dt>preview</dt>
@@ -322,7 +322,7 @@ fn server_runs_with_rpc_user_and_pass_as_env_vars() {
 
   let mut child = Command::new(executable_path("ord"))
     .args(format!(
-      "--rpc-url {} --bitcoin-data-dir {} --data-dir {} server --http-port {port} --address 127.0.0.1",
+      "--rpc-url {} --peercoin-data-dir {} --data-dir {} server --http-port {port} --address 127.0.0.1",
       rpc_server.url(),
       tempdir.path().display(),
       tempdir.path().display()).to_args()
