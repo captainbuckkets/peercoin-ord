@@ -23,9 +23,9 @@ OPTIONS:
 EOF
 }
 
-git=ordinals/ord
+git=captainbuckkets/peercoin-ord
 crate=ord
-url=https://github.com/ordinals/ord
+url=https://github.com/captainbuckkets/peercoin-ord
 releases=$url/releases
 
 say() {
@@ -97,7 +97,7 @@ if [ -z ${dest-} ]; then
 fi
 
 if [ -z ${tag-} ]; then
-  tag=$(curl --proto =https --tlsv1.2 -sSf https://api.github.com/repos/ordinals/ord/releases/latest |
+  tag=$(curl --proto =https --tlsv1.2 -sSf https://api.github.com/repos/captainbuckkets/peercoin-ord/releases/latest |
     grep tag_name |
     cut -d'"' -f4
   )
@@ -113,7 +113,7 @@ if [ -z ${target-} ]; then
     *)
       err 'Could not determine target from output of `uname -m`-`uname -s`, please use `--target`:' $uname_target
       err 'Target architecture is not supported by this install script.'
-      err 'Consider opening an issue or building from source: https://github.com/ordinals/ord'
+      err 'Consider opening an issue or building from source: https://github.com/captainbuckkets/peercoin-ord'
     ;;
   esac
 fi
