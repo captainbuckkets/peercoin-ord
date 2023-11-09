@@ -41,7 +41,7 @@ pub(crate) enum Wallet {
   Receive,
   #[command(about = "Restore wallet")]
   Restore(restore::Restore),
-  #[command(about = "List wallet satoshis")]
+  #[command(about = "List wallet micro peercoins")]
   Sats(sats::Sats),
   #[command(about = "Send sat or inscription")]
   Send(send::Send),

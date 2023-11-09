@@ -19,17 +19,17 @@ pub mod wallet;
 pub(crate) enum Subcommand {
   #[command(about = "Decode a transaction")]
   Decode(decode::Decode),
-  #[command(about = "List the first satoshis of each reward epoch")]
+  #[command(about = "List the first micro peercoin of each reward epoch")]
   Epochs,
-  #[command(about = "Find a satoshi's current location")]
+  #[command(about = "Find a micro peercoin's current location")]
   Find(find::Find),
   #[command(subcommand, about = "Index commands")]
   Index(index::IndexSubcommand),
   #[command(about = "Display index statistics")]
   Info(info::Info),
-  #[command(about = "List the satoshis in an output")]
+  #[command(about = "List the micro peercoins in an output")]
   List(list::List),
-  #[command(about = "Parse a satoshi from ordinal notation")]
+  #[command(about = "Parse a micro peercoin from ordinal notation")]
   Parse(parse::Parse),
   #[command(about = "Run an explorer server populated with inscriptions")]
   Preview(preview::Preview),
@@ -41,7 +41,7 @@ pub(crate) enum Subcommand {
   Supply,
   #[command(about = "Generate teleburn addresses")]
   Teleburn(teleburn::Teleburn),
-  #[command(about = "Display satoshi traits")]
+  #[command(about = "Display micro peercoin traits")]
   Traits(traits::Traits),
   #[command(subcommand, about = "Wallet commands")]
   Wallet(wallet::Wallet),

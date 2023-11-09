@@ -47,7 +47,7 @@ pub(crate) struct Options {
     help = "Track location of runes. RUNES ARE IN AN UNFINISHED PRE-ALPHA STATE AND SUBJECT TO CHANGE AT ANY TIME."
   )]
   pub(crate) index_runes_pre_alpha_i_agree_to_get_rekt: bool,
-  #[arg(long, help = "Track location of all satoshis.")]
+  #[arg(long, help = "Track location of all micro peercoins.")]
   pub(crate) index_sats: bool,
   #[arg(long, short, help = "Use regtest. Equivalent to `--chain regtest`.")]
   pub(crate) regtest: bool,
