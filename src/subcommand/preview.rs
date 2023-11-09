@@ -21,7 +21,7 @@ impl Preview {
 
     let rpc_port = TcpListener::bind("127.0.0.1:0")?.local_addr()?.port();
 
-    let bitcoin_data_dir = tmpdir.path().join("peercoin");
+    let peercoin_data_dir = tmpdir.path().join("peercoin");
 
     fs::create_dir(&peercoin_data_dir)?;
 
