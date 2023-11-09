@@ -24,10 +24,10 @@ impl Chain {
 
   pub(crate) fn default_rpc_port(self) -> u16 {
     match self {
-      Self::Mainnet => 8332,
-      Self::Regtest => 18443,
-      Self::Signet => 38332,
-      Self::Testnet => 18332,
+      Self::Mainnet => 9901,
+      Self::Regtest => 18443, // Same as Bitcoin for both of these https://github.com/peercoin/peercoin/blob/6d1f798822cbaed9777077d76baea13a24e8f403/doc/REST-interface.md?plain=1#L7
+      Self::Signet => 38332, // ^
+      Self::Testnet => 9902,
     }
   }
 
