@@ -19,7 +19,7 @@ impl Representation {
     (
       self,
       match self {
-        Self::Address => r"^(bc|BC|tb|TB|bcrt|BCRT)1.*$",
+        Self::Address => r"^(ppc|PPC|tppc|TPPC|pc|PC)1.*$", // BECH32 prefix is pc
         Self::Decimal => r"^.*\..*$",
         Self::Degree => r"^.*°.*′.*″(.*‴)?$",
         Self::Hash => r"^[[:xdigit:]]{64}$",
