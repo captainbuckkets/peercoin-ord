@@ -15,6 +15,7 @@ pub(crate) fn run(options: Options) -> SubcommandResult {
   let unspent_outputs = index.get_unspent_outputs(Wallet::load(&options)?)?;
   let inscriptions = index.get_inscriptions(&unspent_outputs)?;
 
+  // Will see whether or not we get a domain
   let explorer = match options.chain() {
     Chain::Mainnet => "https://ordinalspeercoin.com/inscription/",
     Chain::Regtest => "http://localhost/inscription/",
