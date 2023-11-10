@@ -49,6 +49,8 @@ pub(crate) enum Subcommand {
 
 impl Subcommand {
   pub(crate) fn run(self, options: Options) -> SubcommandResult {
+
+    // Print the options
     match self {
       Self::Decode(decode) => decode.run(),
       Self::Epochs => epochs::run(),

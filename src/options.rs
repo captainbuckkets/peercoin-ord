@@ -210,6 +210,7 @@ impl Options {
 
     let auth = self.auth()?;
 
+    // Print the rpc_url and auth to the console
     log::info!("Connecting to Peercoin Core at {}", self.rpc_url());
 
     if let Auth::CookieFile(cookie_file) = &auth {
