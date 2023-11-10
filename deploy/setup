@@ -48,13 +48,13 @@ ufw allow ssh
 
 case $CHAIN in
   main)
-    ufw allow 9902
+    ufw allow 9901
     ;;
   signet) # Peercoin doesn't have a signet
     ufw allow 38333
     ;;
   test)
-    ufw allow 9904
+    ufw allow 9903
     ;;
   *)
     echo "Unknown chain: $CHAIN"
