@@ -184,6 +184,12 @@
                           <li role="none"><button role="menuitem" class="theme">
                               <a id="ar">العربية</a>
                           </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="hi">हिंदी</a>
+                          </button></li>
+                          <li role="none"><button role="menuitem" class="theme">
+                              <a id="it">Italiano</a>
+                          </button></li>
                         </ul>
 
                         <script>
@@ -463,7 +469,15 @@ OP_ENDIF
 <p>銘文のデータモデルはHTTP応答のデータモデルであり、銘文がウェブサーバによってサービスされ、ウェブブラウザで閲覧することを可能にします。</p>
 <h2 id="フィールド"><a class="header" href="#フィールド">フィールド</a></h2>
 <p>銘文には、オプションの本文の前にフィールドを含めることができます。各フィールドにはの2つのデータプッシュ、1つのラベルと1つの値。</p>
-<p>現在、定義されている唯一のフィールドは『content-type』です。タグは「1」、その値は本文のMI MEタイプです。</p>
+<p>Currently, there are six defined fields:</p>
+<ul>
+<li><code>content_type</code>, with a tag of <code>1</code>, whose value is the MIME type of the body.</li>
+<li><code>pointer</code>, with a tag of <code>2</code>, see <a href="./inscriptions/pointer.html">pointer docs</a>.</li>
+<li><code>parent</code>, with a tag of <code>3</code>, see <a href="./inscriptions/provenance.html">provenance</a>.</li>
+<li><code>metadata</code>, with a tag of <code>5</code>, see <a href="./inscriptions/metadata.html">metadata</a>.</li>
+<li><code>metaprotocol</code>, with a tag of <code>7</code>, whose value is the metaprotocol identifier.</li>
+<li><code>content_encoding</code>, with a tag of <code>9</code>, whose value is the encoding of the body.</li>
+</ul>
 <p>本文の先頭とフィールドの末尾には &quot;空のデータ&quot;でプッシュが表示されます。</p>
 <p>認識できないラベルの解釈は、偶数か奇数かによって異なり、稲妻ネットワーク&quot;は奇数&quot;にすることができるというルールに従います。</p>
 <p>ラベルさえも、作成、初期割り当て、または銘文の転送に影響を及ぼす可能性のあるフィールドのために使用されます。だから、識別できない銘文でも、フィールドも&quot;未バインド&quot;として表示されなければなりません。つまり、場所がありません。</p>
@@ -537,7 +551,7 @@ OP_IF
     ...
 OP_ENDIF
 </code></pre>
-<p>Which would then be concatinated into <code>{&quot;very&quot;:&quot;long&quot;,&quot;metadata&quot;:&quot;is&quot;,&quot;finally&quot;:&quot;done&quot;}</code>.</p>
+<p>Which would then be concatenated into <code>{&quot;very&quot;:&quot;long&quot;,&quot;metadata&quot;:&quot;is&quot;,&quot;finally&quot;:&quot;done&quot;}</code>.</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="出所"><a class="header" href="#出所">出所</a></h1>
 <p>銘文の所有者は子銘文を作り上げられ、チェーンの上で自由にこれらの子銘文の'遡源'を作り上げ、父の銘文の所有者から作り上げたことを証明します。集合に用いられて、父の銘文の子銘文は同じ集合のメンバーとなります。</p>
 <p>子銘文も自分の子銘文を作成することができ、様々な階層構造が形成ます。例えば、ある芸術家は自分を代表する銘文を作成して、子銘文は彼らが作成したコレクションを代表し、この銘文のそれぞれのサブプロジェクトはコレクションの中のプロジェクトです。</p>
@@ -601,18 +615,86 @@ OP_ENDIF
 <p>アクセサリーやプロパティを含むプロファイル画像セットを生成し、個別の画像として書き込むか、共有テクスチャマップセットに書き込み、の組み合わせ、コラージュスタイル、複数の銘文の中で独特の組み合わせで。</p>
 </li>
 </ul>
-<p>銘文がアクセスできる他のいくつかのエンドポイントは以下の通りです：</p>
+<p>The recursive endpoints are:</p>
+<ul>
+<li><code>/r/blockhash/&lt;HEIGHT&gt;</code>: block hash at given block height.</li>
+<li><code>/r/blockhash</code>: latest block hash.</li>
+<li><code>/r/blockheight</code>: latest block height.</li>
+<li><code>/r/blocktime</code>: UNIX time stamp of latest block.</li>
+<li><code>/r/children/&lt;INSCRIPTION_ID&gt;</code>: the first 100 child inscription ids.</li>
+<li><code>/r/children/&lt;INSCRIPTION_ID&gt;/&lt;PAGE&gt;</code>: the set of 100 child inscription ids on <code>&lt;PAGE&gt;</code>.</li>
+<li><code>/r/metadata/&lt;INSCRIPTION_ID&gt;</code>: JSON string containing the hex-encoded CBOR metadata.</li>
+<li><code>/r/sat/&lt;SAT_NUMBER&gt;</code>: the first 100 inscription ids on a sat.</li>
+<li><code>/r/sat/&lt;SAT_NUMBER&gt;/&lt;PAGE&gt;</code>: the set of 100 inscription ids on <code>&lt;PAGE&gt;</code>.</li>
+<li><code>/r/sat/&lt;SAT_NUMBER&gt;/at/&lt;INDEX&gt;</code>: the inscription id at <code>&lt;INDEX&gt;</code> of all inscriptions on a sat. <code>&lt;INDEX&gt;</code> may be a negative number to index from the back. <code>0</code> being the first and <code>-1</code> being the most recent for example.</li>
+</ul>
+<p>Note: <code>&lt;SAT_NUMBER&gt;</code> only allows the actual number of a sat no other sat notations like degree, percentile or decimal. We may expand to allow those in the future.</p>
+<p>Responses from the above recursive endpoints are JSON. For backwards compatibility additional endpoints are supported, some of which return plain-text responses.</p>
 <ul>
 <li><code>/blockheight</code>：最新のブロック高度。</li>
 <li><code>/blockhash</code>：最新のブロックハッシュ。</li>
 <li><code>/blockhash/&lt;HEIGHT&gt;</code>：指定されたブロック高さのブロックハッシュ。</li>
 <li><code>/blocktime</code>：最新のブロックのUNIXタイムスタンプ。</li>
 </ul>
+<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<ul>
+<li><code>/r/blockheight</code>:</li>
+</ul>
+<pre><code class="language-json">777000
+</code></pre>
+<ul>
+<li><code>/r/blockhash/0</code>:</li>
+</ul>
+<pre><code class="language-json">&quot;000000000019d6689c085ae165831e934ff763ae46a2a6c172b3f1b60a8ce26f&quot;
+</code></pre>
+<ul>
+<li><code>/r/blocktime</code>:</li>
+</ul>
+<pre><code class="language-json">1700770905
+</code></pre>
+<ul>
+<li><code>/r/metadata/35b66389b44535861c44b2b18ed602997ee11db9a30d384ae89630c9fc6f011fi3</code>:</li>
+</ul>
+<pre><code class="language-json">&quot;a2657469746c65664d656d6f727966617574686f726e79656c6c6f775f6f72645f626f74&quot;
+</code></pre>
+<ul>
+<li><code>/r/sat/1023795949035695</code>:</li>
+</ul>
+<pre><code class="language-json">{
+   &quot;ids&quot;:[
+      &quot;17541f6adf6eb160d52bc6eb0a3546c7c1d2adfe607b1a3cddc72cc0619526adi0&quot;
+   ],
+   &quot;more&quot;:false,
+   &quot;page&quot;:0
+}
+</code></pre>
+<ul>
+<li><code>/r/sat/1023795949035695/at/-1</code>:</li>
+</ul>
+<pre><code class="language-json">{
+   &quot;id&quot;:&quot;17541f6adf6eb160d52bc6eb0a3546c7c1d2adfe607b1a3cddc72cc0619526adi0&quot;
+}
+</code></pre>
+<ul>
+<li><code>/r/children/60bcf821240064a9c55225c4f01711b0ebbcab39aa3fafeefe4299ab158536fai0/49</code>:</li>
+</ul>
+<pre><code class="language-json">{
+   &quot;ids&quot;:[
+      &quot;7cd66b8e3a63dcd2fada917119830286bca0637267709d6df1ca78d98a1b4487i4900&quot;,
+      &quot;7cd66b8e3a63dcd2fada917119830286bca0637267709d6df1ca78d98a1b4487i4901&quot;,
+      ...
+      &quot;7cd66b8e3a63dcd2fada917119830286bca0637267709d6df1ca78d98a1b4487i4935&quot;,
+      &quot;7cd66b8e3a63dcd2fada917119830286bca0637267709d6df1ca78d98a1b4487i4936&quot;
+   ],
+   &quot;more&quot;:false,
+   &quot;page&quot;:49
+}
+</code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="pointer"><a class="header" href="#pointer">Pointer</a></h1>
 <p>In order to make an inscription on a sat other than the first of its input, a zero-based integer, called the &quot;pointer&quot;, can be provided with tag <code>2</code>, causing the inscription to be made on the sat at the given position in the outputs. If the pointer is equal to or greater than the number of total sats in the outputs of the inscribe transaction, it is ignored, and the inscription is made as usual. The value of the pointer field is a little endian integer, with trailing zeroes ignored.</p>
 <p>An even tag is used, so that old versions of <code>ord</code> consider the inscription to be unbound, instead of assigning it, incorrectly, to the first sat.</p>
 <p>This can be used to create multiple inscriptions in a single transaction on different sats, when otherwise they would be made on the same sat.</p>
-<h2 id="examples"><a class="header" href="#examples">Examples</a></h2>
+<h2 id="examples-1"><a class="header" href="#examples-1">Examples</a></h2>
 <p>An inscription with pointer 255:</p>
 <pre><code>OP_FALSE
 OP_IF
@@ -789,7 +871,7 @@ OP_ENDIF
 <div style="break-before: page; page-break-before: always;"></div><h1 id="序数理論の指導"><a class="header" href="#序数理論の指導">序数理論の指導</a></h1>
 <p>ガイドの一覧については、カタログを参照してください。これには、ブロックブラウザガイド、スマートフォンガイド、銘文ガイドなどがあります。</p>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="序数ブラウザ"><a class="header" href="#序数ブラウザ">序数ブラウザ</a></h1>
-<p><code>ord</code> ファイルにはブロックブラウザが含まれています。当社のメインネットワークブロックチェーンは <a href="https://ordinals.com">ordinals.com</a>, signet<a href="https://signet.ordinals.com">signet.ordinals.com</a>に配置します。</p>
+<p>The <code>ord</code> binary includes a block explorer. We host an instance of the block explorer on mainnet at <a href="https://ordinals.com">ordinals.com</a>, and on signet at <a href="https://signet.ordinals.com">signet.ordinals.com</a>.</p>
 <h3 id="運行ブラウザ"><a class="header" href="#運行ブラウザ">運行ブラウザ</a></h3>
 <p>サーバはローカルで運行可能：</p>
 <p><code>ord server</code></p>
@@ -808,7 +890,7 @@ OP_ENDIF
 <p>創世記ブロックのcoinbaseトランザクションなど、ハッシュによってトランザクションを見つけることができます。：</p>
 <p><a href="https://ordinals.com/search/4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b">4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b</a></p>
 <h3 id="輸出"><a class="header" href="#輸出">輸出</a></h3>
-<p>アウトポイントを使用して、創世ブロックcoinbaseトランザクションのユニークな出力などのトランザクション出力を検索できます：</p>
+<p>Transaction outputs can be searched by outpoint, for example, the only output of the genesis block coinbase transaction:</p>
 <p><a href="https://ordinals.com/search/4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b:0">4a5e1e4baab89f3a32518a88c31bc87f618f76673e2cc77ab2127b7afdeda33b:0</a></p>
 <h3 id="聡"><a class="header" href="#聡">聡</a></h3>
 <p>聡は整数で検索することができ、ビットコインの供給全体の中のそれらの位置：</p>
@@ -822,7 +904,7 @@ OP_ENDIF
 <p>または百分率で、採掘時にすでに発行された、または発行される予定のビットコインの供給量のパーセント：</p>
 <p><a href="https://ordinals.com/search/100%">100%</a></p>
 <h2 id="json-api"><a class="header" href="#json-api">JSON-API</a></h2>
-<p>You can run <code>ord server</code> with the <code>--enable-json-api</code> flag to access endpoints that return JSON instead of HTML if you set the HTTP <code>Accept: application/json</code> header. The structure of theses objects closely follows what is shown in the HTML. These endpoints are:</p>
+<p>You can run <code>ord server</code> with the <code>--enable-json-api</code> flag to access endpoints that return JSON instead of HTML if you set the HTTP <code>Accept: application/json</code> header. The structure of these objects closely follows what is shown in the HTML. These endpoints are:</p>
 <ul>
 <li><code>/inscription/&lt;INSCRIPTION_ID&gt;</code></li>
 <li><code>/inscriptions</code></li>
@@ -977,7 +1059,7 @@ OP_ENDIF
 <p>できなかった取引状況を検査します：</p>
 <pre><code>ord wallet transactions
 </code></pre>
-<p>取引が確認されると、受信者は次のコマンドを使用して受信した銘文を見ることができます</p>
+<p>Once the send transaction confirms, you can confirm receipt by running:</p>
 <pre><code>ord wallet inscriptions
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="batch-inscribing"><a class="header" href="#batch-inscribing">Batch Inscribing</a></h1>
@@ -989,20 +1071,28 @@ OP_ENDIF
 <pre><code class="language-yaml"># example batch file
 
 # there are two modes:
-# - `separate-outputs`: place all inscriptions in separate postage-sized outputs
-# - `shared-output`: place inscriptions in a single output separated by postage
+# - `separate-outputs`: inscribe on separate postage-sized outputs
+# - `shared-output`: inscribe on a single output separated by postage
+# - `same-sat`: inscribe on the same sat
 mode: separate-outputs
 
 # parent inscription:
 parent: 6ac5cacb768794f4fd7a78bf00f2074891fce68bd65c4ff36e77177237aacacai0
 
+# postage for each inscription:
+postage: 12345
+
+# sat to inscribe on, can only be used with `same-sat`:
+# sat: 5000000000
+
 # inscriptions to inscribe
 #
 # each inscription has the following fields:
 #
-# `inscription`: path to inscription contents
+# `file`: path to inscription contents
 # `metadata`: inscription metadata (optional)
 # `metaprotocol`: inscription metaprotocol (optional)
+# `destination`: destination for that inscription (optional). Note: If no destination is specified a new wallet change address will be used
 inscriptions:
   - file: mango.avif
     metadata:
@@ -1013,6 +1103,7 @@ inscriptions:
         metus est et odio. Nullam venenatis, urna et molestie vestibulum, orci
         mi efficitur risus, eu malesuada diam lorem sed velit. Nam fermentum
         dolor et luctus euismod.
+    destination: bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4
 
   - file: token.json
     metaprotocol: brc-20
@@ -1020,6 +1111,7 @@ inscriptions:
   - file: tulip.png
     metadata:
       author: Satoshi Nakamoto
+    destination: bc1pdqrcrxa8vx6gy75mfdfj84puhxffh4fq46h3gkp6jxdd0vjcsdyspfxcv6
 </code></pre>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="聡狩り"><a class="header" href="#聡狩り">聡狩り</a></h1>
 <p><em>このガイドは時代遅れです。書かれて以来、'ord'インストールファイルが変更されました。「--index-sats」フラグが指定されている場合にのみ、完全なスマートインデックスが作成されます。さらに「ord」には現在、ビットコインのコアウォレットを含むウォレットが内蔵されていて、ord wallet --help`を参照してください。</em></p>
@@ -1196,7 +1288,7 @@ inscriptions:
 <div style="break-before: page; page-break-before: always;"></div><h1 id="teleburning"><a class="header" href="#teleburning">Teleburning</a></h1>
 <p>Teleburn addresses can be used to burn assets on other blockchains, leaving behind in the smoking rubble a sort of forwarding address pointing to an inscription on Bitcoin.</p>
 <p>Teleburning an asset means something like, &quot;I'm out. Find me on Bitcoin.&quot;</p>
-<p>Teleburn addresses are derived from inscription IDs. They have no corresponding private key, so assets sent to a teleburn address are burned. Currently, only Ethereum teleburn addresses are suppported. Pull requests adding teleburn addresses for other chains are welcome.</p>
+<p>Teleburn addresses are derived from inscription IDs. They have no corresponding private key, so assets sent to a teleburn address are burned. Currently, only Ethereum teleburn addresses are supported. Pull requests adding teleburn addresses for other chains are welcome.</p>
 <h2 id="ethereum"><a class="header" href="#ethereum">Ethereum</a></h2>
 <p>Ethereum teleburn addresses are derived by taking the first 20 bytes of the SHA-256 hash of the inscription ID, serialized as 36 bytes, with the first 32 bytes containing the transaction ID, and the last four bytes containing big-endian inscription index, and interpreting it as an Ethereum address.</p>
 <h2 id="例を挙げます-2"><a class="header" href="#例を挙げます-2">例を挙げます</a></h2>
@@ -1453,7 +1545,7 @@ ord index update
 <div style="break-before: page; page-break-before: always;"></div><h1 id="賞金任務-3"><a class="header" href="#賞金任務-3">賞金任務 3</a></h1>
 <h2 id="標準-3"><a class="header" href="#標準-3">標準</a></h2>
 <p>任务3は二つの部分があり、序数の名前に基づきます_序数の名前は序数の数字を直したbase-26によって行われたコードです。短い名前を時間をかけはいけない創成プレート奨励の中に絞らないように序数の長くなるほど、序数の名前は短くなります。例えば、初めに採掘された０番の聡の名前は<code>nvtdijuwxlpで</code>、最後に採掘された2,099,999,997,689,999番の聡の名前は <code>a</code>です。</p>
-<p>賞金計画はブロック高度の840000の-第四回の半分にしたの初めてのブロックまで開放します。ブロック高度の840000及びそれ以上のブロックは考えられません</p>
+<p>The bounty is open for submissions until block 840000—the first block after the fourth halving. Submissions included in block 840000 or later will not be considered.</p>
 <p>二つの部分のミッションが使われ <a href="bounty/frequency.tsv">frequency.tsv</a>, 一つの単語のリスト及び <a href="http://storage.googleapis.com/books/ngrams/books/datasetsv2.html">Google Books Ngram dataset</a>で現れた回数。濾過した後、提出時間が終わるときに発掘された聡の名前だけを含まれ、これらの名称は少なくともコーパスの中で5000回以上現れます。</p>
 <p><code>frequency.tsv</code> タブ区切り値のファイルは第一列が単語で，第二列がコーパスに現れる回数ですこれらの条目は出現の最も低い頻度から最も高い頻度まで順番に並べています。</p>
 <p><code>frequency.tsv</code> [このプログラム]を使って(https://github.com/casey/onegrams)纂訳されます。.</p>
