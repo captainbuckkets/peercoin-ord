@@ -29,6 +29,7 @@ struct JsonError {
 
 impl Fetcher {
   pub(crate) fn new(options: &Options) -> Result<Self> {
+
     let client = Client::new();
 
     let url = if options.rpc_url().starts_with("http://") {
@@ -38,8 +39,11 @@ impl Fetcher {
     };
 
     let url = Uri::try_from(&url).map_err(|e| anyhow!("Invalid rpc url {url}: {e}"))?;
+    println!("url: {:?}", url);
 
     let (user, password) = options.auth()?.get_user_pass()?;
+    println!("user: {:?}, password: {:?}", user, password);
+
     let auth = format!("{}:{}", user.unwrap(), password.unwrap());
     let auth = format!(
       "Basic {}",

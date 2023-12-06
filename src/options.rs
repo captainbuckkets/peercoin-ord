@@ -199,8 +199,8 @@ impl Options {
 
     match (rpc_user, rpc_pass) {
       (Some(rpc_user), Some(rpc_pass)) => Ok(Auth::UserPass(rpc_user, rpc_pass)),
-      (None, Some(_rpc_pass)) => Err(anyhow!("no bitcoind rpc user specified")),
-      (Some(_rpc_user), None) => Err(anyhow!("no bitcoind rpc password specified")),
+      (None, Some(_rpc_pass)) => Err(anyhow!("no peercoind rpc user specified")),
+      (Some(_rpc_user), None) => Err(anyhow!("no peercoind rpc password specified")),
       _ => Ok(Auth::CookieFile(self.cookie_file()?)),
     }
   }
@@ -210,8 +210,9 @@ impl Options {
 
     let auth = self.auth()?;
 
+    print!("Connecting to Peercoin Core");
+
     // Print the rpc_url and auth to the console
-    log::info!("Connecting to Peercoin Core at {}", self.rpc_url());
 
     if let Auth::CookieFile(cookie_file) = &auth {
       log::info!(
@@ -223,12 +224,22 @@ impl Options {
     let client = Client::new(&rpc_url, auth)
       .with_context(|| format!("failed to connect to Peercoin Core RPC at {rpc_url}"))?;
 
-    let rpc_chain = match client.get_blockchain_info()?.chain.as_str() {
-      "main" => Chain::Mainnet,
-      "test" => Chain::Testnet,
+    let info = client.get_blockchain_info()?;
+    // Print the info.chain to the console
+    println!("Peercoin Core is on {}", info.chain);
+    let rpc_chain_str = info.chain.to_string();
+    // Print the chain to the console
+    println!("CHEIF KEEF {}", rpc_chain_str.as_str());
+    let rpc_chain = match rpc_chain_str.as_str() {
+      "bitcoin" => Chain::Mainnet,
+      "testnet" => Chain::Testnet,
       "regtest" => Chain::Regtest,
       "signet" => Chain::Signet,
-      other => bail!("Peercoin RPC server on unknown chain: {other}"),
+      other => bail!(
+        "Peercoin RPC server on unknown chain: {} {}",
+        rpc_chain_str,
+        other
+      ),
     };
 
     let ord_chain = self.chain();

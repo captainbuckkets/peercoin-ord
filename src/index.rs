@@ -167,7 +167,9 @@ pub(crate) struct Index {
 
 impl Index {
   pub(crate) fn open(options: &Options) -> Result<Self> {
+
     let client = options.bitcoin_rpc_client()?;
+    
 
     let path = if let Some(path) = &options.index {
       path.clone()

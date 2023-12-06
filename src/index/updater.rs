@@ -178,13 +178,17 @@ impl<'index> Updater<'_> {
 
       match Self::get_block_with_retries(&client, height, index_sats, first_inscription_height) {
         Ok(Some(block)) => {
+          println!("Ever here?");
           if let Err(err) = tx.send(block.into()) {
             log::info!("Block receiver disconnected: {err}");
             break;
           }
           height += 1;
         }
-        Ok(None) => break,
+        Ok(None) => {
+          println!("None");
+          break
+        },
         Err(err) => {
           log::error!("failed to fetch block {height}: {err}");
           break;
@@ -202,6 +206,8 @@ impl<'index> Updater<'_> {
     first_inscription_height: u64,
   ) -> Result<Option<Block>> {
     let mut errors = 0;
+
+    println!("height: {}", height);
     loop {
       match client
         .get_block_hash(height)
@@ -210,8 +216,12 @@ impl<'index> Updater<'_> {
           option
             .map(|hash| {
               if index_sats || height >= first_inscription_height {
-                Ok(client.get_block(&hash)?)
+                println!("hash: {}", hash);
+                let block = client.get_block(&hash)?;
+                println!("block: {:?}", block);
+                Ok(block)
               } else {
+                println!("else");
                 Ok(Block {
                   header: client.get_block_header(&hash)?,
                   txdata: Vec::new(),

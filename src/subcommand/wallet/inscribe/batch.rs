@@ -443,7 +443,8 @@ impl Batch {
     let info = client.get_descriptor_info(&format!("rawtr({})", recovery_private_key.to_wif()))?;
 
     let response = client.import_descriptors(ImportDescriptors {
-      descriptor: format!("rawtr({})#{}", recovery_private_key.to_wif(), info.checksum),
+      // descriptor: format!("rawtr({})#{}", recovery_private_key.to_wif(), info.checksum),
+      descriptor: format!("rawtr({})#{}", recovery_private_key.to_wif(), info.checksum.unwrap_or_default()),
       timestamp: Timestamp::Now,
       active: Some(false),
       range: None,
