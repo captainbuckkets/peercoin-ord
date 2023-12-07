@@ -1,12 +1,12 @@
 [package]
 name = "ord"
-description = "◉ Ordinal wallet and block explorer"
+description = "◉ Ordinal wallet and block explorer for peercoin"
 version = "0.12.3"
 license = "CC0-1.0"
 edition = "2021"
 autotests = false
-homepage = "https://github.com/ordinals/ord"
-repository = "https://github.com/ordinals/ord"
+homepage = "https://github.com/captainbuckkets/peercoin-ord"
+repository = "https://github.com/captainbuckkets/peercoin-ord"
 autobins = false
 rust-version = "1.67"
 
