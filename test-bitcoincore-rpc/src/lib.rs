@@ -17,11 +17,11 @@ use {
     Wtxid,
   },
   bitcoincore_rpc::json::{
-    Bip125Replaceable, CreateRawTransactionInput, Descriptor, EstimateMode, GetBalancesResult,
+    Bip125Replaceable, CreateRawTransactionInput, EstimateMode, GetBalancesResult,
     GetBalancesResultEntry, GetBlockHeaderResult, GetBlockchainInfoResult, GetDescriptorInfoResult,
     GetNetworkInfoResult, GetRawTransactionResult, GetTransactionResult,
     GetTransactionResultDetail, GetTransactionResultDetailCategory, GetWalletInfoResult,
-    ImportDescriptors, ImportMultiResult, ListDescriptorsResult, ListTransactionResult,
+    ImportDescriptors, ImportMultiResult, ListTransactionResult,
     ListUnspentResultEntry, LoadWalletResult, SignRawTransactionInput, SignRawTransactionResult,
     Timestamp, WalletTxInfo,
   },

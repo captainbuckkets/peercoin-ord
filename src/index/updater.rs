@@ -82,6 +82,14 @@ impl<'index> Updater<'_> {
       Some(progress_bar)
     };
 
+    // print the index, height, and index_sats
+    log::info!(
+      "index: {}, height: {}, index_sats: {}",
+      self.index.path.display(),
+      self.height,
+      self.index.index_sats
+    );
+
     let rx = Self::fetch_blocks_from(self.index, self.height, self.index.index_sats)?;
 
     let (mut outpoint_sender, mut value_receiver) = Self::spawn_fetcher(self.index)?;
@@ -161,6 +169,7 @@ impl<'index> Updater<'_> {
     mut height: u32,
     index_sats: bool,
   ) -> Result<mpsc::Receiver<BlockData>> {
+
     let (tx, rx) = mpsc::sync_channel(32);
 
     let height_limit = index.height_limit;
@@ -168,6 +177,9 @@ impl<'index> Updater<'_> {
     let client = index.options.bitcoin_rpc_client()?;
 
     let first_inscription_height = index.first_inscription_height;
+
+    log::info!("Height limit: {:?}", height_limit);
+    log::info!("First inscription height: {:?}", first_inscription_height);
 
     thread::spawn(move || loop {
       if let Some(height_limit) = height_limit {
@@ -325,13 +337,6 @@ impl<'index> Updater<'_> {
     let mut sat_ranges_written = 0;
     let mut outputs_in_block = 0;
 
-    log::info!(
-      "Block {} at {} with {} transactions…",
-      self.height,
-      timestamp(block.header.time),
-      block.txdata.len()
-    );
-
     // If value_receiver still has values something went wrong with the last block
     // Could be an assert, shouldn't recover from this and commit the last block
     let Err(TryRecvError::Empty) = value_receiver.try_recv() else {
@@ -433,7 +438,7 @@ impl<'index> Updater<'_> {
       lost_sats,
       next_sequence_number,
       outpoint_to_value: &mut outpoint_to_value,
-      reward: Height(self.height).subsidy(),
+      reward: Height(self.height).subsidy() as i128,
       sat_to_sequence_number: &mut sat_to_sequence_number,
       satpoint_to_sequence_number: &mut satpoint_to_sequence_number,
       sequence_number_to_children: &mut sequence_number_to_children,

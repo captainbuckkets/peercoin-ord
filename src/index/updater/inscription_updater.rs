@@ -49,7 +49,7 @@ pub(super) struct InscriptionUpdater<'a, 'db, 'tx> {
   pub(super) lost_sats: u64,
   pub(super) next_sequence_number: u32,
   pub(super) outpoint_to_value: &'a mut Table<'db, 'tx, &'static OutPointValue, u64>,
-  pub(super) reward: u64,
+  pub(super) reward: i128,
   pub(super) sat_to_sequence_number: &'a mut MultimapTable<'db, 'tx, u64, u32>,
   pub(super) satpoint_to_sequence_number:
     &'a mut MultimapTable<'db, 'tx, &'static SatPointValue, u32>,
@@ -75,6 +75,11 @@ impl<'a, 'db, 'tx> InscriptionUpdater<'a, 'db, 'tx> {
     let mut inscribed_offsets = BTreeMap::new();
     let mut total_input_value = 0;
     let total_output_value = tx.output.iter().map(|txout| txout.value).sum::<u64>();
+
+    // Print the sat ranges
+    if let Some(input_sat_ranges) = input_sat_ranges {
+      print!("{} sat ranges, ", input_sat_ranges.len());
+    }
 
     for (input_index, tx_in) in tx.input.iter().enumerate() {
       // skip subsidy since no inscriptions possible
@@ -323,14 +328,14 @@ impl<'a, 'db, 'tx> InscriptionUpdater<'a, 'db, 'tx> {
         };
         self.update_inscription_location(input_sat_ranges, flotsam, new_satpoint)?;
       }
-      self.lost_sats += self.reward - output_value;
+      self.lost_sats += self.reward as u64 - output_value;
       Ok(())
     } else {
       self.flotsam.extend(inscriptions.map(|flotsam| Flotsam {
-        offset: self.reward + flotsam.offset - output_value,
+        offset: self.reward as u64 + flotsam.offset - output_value,
         ..flotsam
       }));
-      self.reward += total_input_value - output_value;
+      self.reward += total_input_value as i128 - output_value as i128;
       Ok(())
     }
   }

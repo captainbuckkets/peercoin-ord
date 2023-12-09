@@ -26,6 +26,7 @@ fn transaction() -> Vec<u8> {
 
   let transaction = Transaction {
     version: 0,
+    time: 0,
     lock_time: LockTime::ZERO,
     input: vec![TxIn {
       previous_output: OutPoint::null(),

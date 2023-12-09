@@ -89,4 +89,5 @@ pulldown-cmark = "0.9.2"
 
 [patch.crates-io]
 bitcoin = { git = "https://github.com/captainbuckkets/rust-peercoin", branch = "0.30.x-patch" }
+# bitcoin = { git = "https://github.com/captainbuckkets/rust-blackcoin", branch = "master" }
 bitcoincore-rpc = { git = "https://github.com/captainbuckkets/rust-bitcoincore-rpc", branch = "master" }

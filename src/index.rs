@@ -188,6 +188,8 @@ impl Index {
   pub(crate) fn open(options: &Options) -> Result<Self> {
     let client = options.bitcoin_rpc_client()?;
 
+    log::info!("Client loaded");
+
     let path = if let Some(path) = &options.index {
       path.clone()
     } else {
@@ -405,7 +407,7 @@ impl Index {
     for outpoint in utxos.keys() {
       if outpoint_to_value.get(&outpoint.store())?.is_none() {
         return Err(anyhow!(
-          "output in Bitcoin Core wallet but not in ord index: {outpoint}"
+          "output in Peercoin Core wallet but not in ord index: {outpoint}"
         ));
       }
     }

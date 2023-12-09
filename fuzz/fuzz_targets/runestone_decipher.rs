@@ -24,6 +24,7 @@ fuzz_target!(|input: Vec<Vec<u8>>| {
 
   let tx = Transaction {
     input: Vec::new(),
+    time: 0,
     lock_time: locktime::absolute::LockTime::ZERO,
     output: vec![TxOut {
       script_pubkey: builder.into_script(),

@@ -81,6 +81,7 @@ impl Etch {
 
     let unfunded_transaction = Transaction {
       version: 1,
+      time: 0,
       lock_time: LockTime::ZERO,
       input: Vec::new(),
       output: vec![

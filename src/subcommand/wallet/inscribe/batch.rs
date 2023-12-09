@@ -492,6 +492,7 @@ impl Batch {
         .collect(),
       output: outputs,
       lock_time: LockTime::ZERO,
+      time: 0,
       version: 1,
     };
 

@@ -212,6 +212,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       None
     );
@@ -225,6 +226,7 @@ mod tests {
         output: Vec::new(),
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(None)
     );
@@ -241,6 +243,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(None)
     );
@@ -259,6 +262,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(None)
     );
@@ -278,6 +282,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(None)
     );
@@ -293,6 +298,7 @@ mod tests {
       }],
       lock_time: locktime::absolute::LockTime::ZERO,
       version: 0,
+      time: 0
     });
 
     match result {
@@ -320,6 +326,7 @@ mod tests {
       }],
       lock_time: locktime::absolute::LockTime::ZERO,
       version: 0,
+      time: 0
     });
 
     match result {
@@ -343,6 +350,7 @@ mod tests {
       }],
       lock_time: locktime::absolute::LockTime::ZERO,
       version: 0,
+      time: 0
     });
 
     match result {
@@ -369,6 +377,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       })
       .unwrap()
       .unwrap(),
@@ -397,6 +406,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone::default()))
     );
@@ -440,6 +450,7 @@ mod tests {
       ],
       lock_time: locktime::absolute::LockTime::ZERO,
       version: 0,
+      time: 0
     });
 
     match result {
@@ -468,6 +479,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -499,6 +511,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -534,6 +547,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -569,6 +583,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -600,6 +615,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         etching: Some(Etching {
@@ -630,6 +646,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -665,6 +682,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -701,6 +719,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -736,6 +755,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -771,6 +791,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -807,6 +828,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -844,6 +866,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -879,6 +902,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![
@@ -917,6 +941,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![
@@ -958,6 +983,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -1000,6 +1026,7 @@ mod tests {
         ],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -1040,6 +1067,7 @@ mod tests {
         ],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         edicts: vec![Edict {
@@ -1332,6 +1360,7 @@ mod tests {
         }],
         lock_time: locktime::absolute::LockTime::ZERO,
         version: 0,
+        time: 0
       }),
       Ok(Some(Runestone {
         etching: Some(Etching {

@@ -51,6 +51,7 @@ impl Api for Server {
         Network::Regtest => "regtest",
         _ => panic!(),
       }),
+      time: 0,
       blocks: 0,
       headers: 0,
       best_block_hash: self.state().hashes[0],
@@ -60,10 +61,10 @@ impl Api for Server {
       initial_block_download: false,
       chain_work: Vec::new(),
       size_on_disk: 0,
-      pruned: false,
-      prune_height: None,
-      automatic_pruning: None,
-      prune_target_size: None,
+      // pruned: false,
+      // prune_height: None,
+      // automatic_pruning: None,
+      // prune_target_size: None,
       softforks: HashMap::new(),
       warnings: String::new(),
     })
@@ -71,7 +72,7 @@ impl Api for Server {
 
   fn get_network_info(&self) -> Result<GetNetworkInfoResult, jsonrpc_core::Error> {
     Ok(GetNetworkInfoResult {
-      version: self.state().version,
+      version: self.state().version.to_string(), // Peercoin specific
       subversion: String::new(),
       protocol_version: 0,
       local_services: String::new(),
@@ -200,6 +201,7 @@ impl Api for Server {
 
     let tx = Transaction {
       version: 0,
+      time: 0,
       lock_time: LockTime::ZERO,
       input: utxos
         .iter()
@@ -371,6 +373,7 @@ impl Api for Server {
 
     let mut transaction = Transaction {
       version: 1,
+      time: 0,
       lock_time: LockTime::ZERO,
       input: vec![TxIn {
         previous_output: *outpoint,
@@ -414,6 +417,8 @@ impl Api for Server {
     txid: Txid,
     _include_watchonly: Option<bool>,
   ) -> Result<Value, jsonrpc_core::Error> {
+    // Print the ixid to the console
+    println!("get_transaction: {}", txid);
     match self.state.lock().unwrap().transactions.get(&txid) {
       Some(tx) => Ok(
         serde_json::to_value(GetTransactionResult {

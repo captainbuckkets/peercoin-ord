@@ -49,6 +49,7 @@ impl State {
 
   pub(crate) fn push_block(&mut self, subsidy: u64) -> Block {
     let coinbase = Transaction {
+      time: 0,
       version: 0,
       lock_time: LockTime::ZERO,
       input: vec![TxIn {
@@ -161,6 +162,7 @@ impl State {
 
     let mut tx = Transaction {
       version: 0,
+      time: 0,
       lock_time: LockTime::ZERO,
       input,
       output: (0..template.outputs)
