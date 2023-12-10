@@ -132,9 +132,6 @@ impl Fetcher {
 
     let response = self.client.request(req).await?;
 
-    // Print the response to the console
-    println!("{:?}", response);
-
     let buf = hyper::body::to_bytes(response).await?;
 
     let results: Vec<JsonResponse<String>> = match serde_json::from_slice(&buf) {

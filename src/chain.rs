@@ -33,7 +33,7 @@ impl Chain {
 
   pub(crate) fn inscription_content_size_limit(self) -> Option<usize> {
     match self {
-      Self::Mainnet | Self::Regtest => None,
+      Self::Mainnet | Self::Regtest => Some(102400), // Peercoin chain limit as per Peerchemist
       Self::Testnet | Self::Signet => Some(1024),
     }
   }

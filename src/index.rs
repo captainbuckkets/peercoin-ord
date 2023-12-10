@@ -389,7 +389,7 @@ impl Index {
     );
 
     let locked_utxos: BTreeSet<OutPoint> = self.get_locked_outputs(wallet)?;
-
+    // Print locked_utxos
     for outpoint in locked_utxos {
       utxos.insert(
         outpoint,
@@ -402,6 +402,8 @@ impl Index {
         ),
       );
     }
+
+
     let rtx = self.database.begin_read()?;
     let outpoint_to_value = rtx.open_table(OUTPOINT_TO_VALUE)?;
     for outpoint in utxos.keys() {
