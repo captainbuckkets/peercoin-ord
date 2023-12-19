@@ -388,6 +388,8 @@ impl Index {
         }),
     );
 
+    println!("utxos: {:?}", utxos);
+
     let locked_utxos: BTreeSet<OutPoint> = self.get_locked_outputs(wallet)?;
     // Print locked_utxos
     for outpoint in locked_utxos {
@@ -403,16 +405,20 @@ impl Index {
       );
     }
 
+    println!("locked utxos: {:?}", utxos);
 
-    let rtx = self.database.begin_read()?;
-    let outpoint_to_value = rtx.open_table(OUTPOINT_TO_VALUE)?;
-    for outpoint in utxos.keys() {
-      if outpoint_to_value.get(&outpoint.store())?.is_none() {
-        return Err(anyhow!(
-          "output in Peercoin Core wallet but not in ord index: {outpoint}"
-        ));
-      }
-    }
+    // let rtx = self.database.begin_read()?;
+    // let outpoint_to_value = rtx.open_table(OUTPOINT_TO_VALUE)?;
+
+    // println!("outpoint_to_value: {:?}", outpoint_to_value);
+
+    // for outpoint in utxos.keys() {
+    //   if outpoint_to_value.get(&outpoint.store())?.is_none() {
+    //     return Err(anyhow!(
+    //       "output in Peercoin Core wallet but not in ord index: {outpoint}"
+    //     ));
+    //   }
+    // }
 
     Ok(utxos)
   }

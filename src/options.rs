@@ -249,12 +249,13 @@ impl Options {
     let client = self.bitcoin_rpc_client()?;
 
     // const MIN_VERSION: usize = 240000;
+    // Using the protocol version here
     const MIN_VERSION: usize = 70017;
 
     let bitcoin_version = client.version()?;
     if bitcoin_version < MIN_VERSION {
       bail!(
-        "Bitcoin Core {} or newer required, current version is {}",
+        "Peercoin Core {} or newer required, current version is {}",
         Self::format_bitcoin_core_version(MIN_VERSION),
         Self::format_bitcoin_core_version(bitcoin_version),
       );
@@ -266,21 +267,26 @@ impl Options {
       }
 
       // Remove for now
-      // let descriptors = client.list_descriptors(None)?.descriptors;
+      let descriptors = client.list_descriptors(None)?.descriptors;
+      println!("descriptors: {:?}", descriptors);
 
-      // let tr = descriptors
-      //   .iter()
-      //   .filter(|descriptor| descriptor.desc.starts_with("tr("))
-      //   .count();
+      let tr = descriptors
+        .iter()
+        .filter(|descriptor| descriptor.desc.starts_with("tr("))
+        .count();
 
-      // let rawtr = descriptors
-      //   .iter()
-      //   .filter(|descriptor| descriptor.desc.starts_with("rawtr("))
-      //   .count();
+      println!("tr: {}", tr);
 
-      // if tr != 2 || descriptors.len() != 2 + rawtr {
-      //   bail!("wallet \"{}\" contains unexpected output descriptors, and does not appear to be an `ord` wallet, create a new wallet with `ord wallet create`", self.wallet);
-      // }
+      let rawtr = descriptors
+        .iter()
+        .filter(|descriptor| descriptor.desc.starts_with("rawtr("))
+        .count();
+
+      println!("rawtr: {}", rawtr);
+
+      if tr != 2 || descriptors.len() != 2 + rawtr {
+        bail!("wallet \"{}\" contains unexpected output descriptors, and does not appear to be an `ord` wallet, create a new wallet with `ord wallet create`", self.wallet);
+      }
     }
 
     Ok(client)

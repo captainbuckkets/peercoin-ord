@@ -1620,7 +1620,7 @@ mod tests {
     let after = TransactionBuilder::estimate_vbytes_with(
       0,
       vec![
-        "bc1pxwww0ct9ue7e8tdnlmug5m2tamfn7q06sahstg39ys4c9f3340qqxrdu9k"
+        "pc1pxwww0ct9ue7e8tdnlmug5m2tamfn7q06sahstg39ys4c9f3340qqxrdu9k"
           .parse::<Address<NetworkUnchecked>>()
           .unwrap()
           .assume_checked(),

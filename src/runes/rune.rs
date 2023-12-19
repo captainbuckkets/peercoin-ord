@@ -43,7 +43,7 @@ impl Display for Rune {
   fn fmt(&self, f: &mut Formatter) -> fmt::Result {
     let mut n = self.0;
     if n == u128::max_value() {
-      return write!(f, "BCGDENLQRQWDSLRUGSNLBTMFIJAV");
+      return write!(f, "PCGDENLQRQWDSLRUGSNLBTMFIJAV");
     }
 
     n += 1;
@@ -130,14 +130,14 @@ mod tests {
     case(27, "AB");
     case(51, "AZ");
     case(52, "BA");
-    case(u128::max_value() - 2, "BCGDENLQRQWDSLRUGSNLBTMFIJAT");
-    case(u128::max_value() - 1, "BCGDENLQRQWDSLRUGSNLBTMFIJAU");
-    case(u128::max_value(), "BCGDENLQRQWDSLRUGSNLBTMFIJAV");
+    case(u128::max_value() - 2, "PCGDENLQRQWDSLRUGSNLBTMFIJAT");
+    case(u128::max_value() - 1, "PCGDENLQRQWDSLRUGSNLBTMFIJAU");
+    case(u128::max_value(), "PCGDENLQRQWDSLRUGSNLBTMFIJAV");
   }
 
   #[test]
   fn from_str_out_of_range() {
-    "BCGDENLQRQWDSLRUGSNLBTMFIJAW".parse::<Rune>().unwrap_err();
+    "PCGDENLQRQWDSLRUGSNLBTMFIJAW".parse::<Rune>().unwrap_err();
   }
 
   #[test]

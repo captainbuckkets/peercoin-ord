@@ -315,7 +315,7 @@ fn inscriptions_cannot_be_sent_by_satpoint() {
   rpc_server.mine_blocks(1);
 
   CommandBuilder::new(format!(
-    "wallet send --fee-rate 1 bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4 {reveal}:0:0"
+    "wallet send --fee-rate 1 pc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4 {reveal}:0:0"
   ))
   .rpc_server(&rpc_server)
   .expected_stderr("error: inscriptions must be sent by inscription ID\n")
@@ -331,7 +331,7 @@ fn send_btc_with_fee_rate() {
   rpc_server.mine_blocks(1);
 
   CommandBuilder::new(
-    "wallet send --fee-rate 13.3 bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4 1btc",
+    "wallet send --fee-rate 13.3 pc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4 1btc",
   )
   .rpc_server(&rpc_server)
   .run_and_deserialize_output::<Output>();
@@ -356,7 +356,7 @@ fn send_btc_with_fee_rate() {
     rpc_server.sent(),
     &[Sent {
       amount: 1.0,
-      address: "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
+      address: "pc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
         .parse::<Address<NetworkUnchecked>>()
         .unwrap()
         .assume_checked(),
@@ -374,7 +374,7 @@ fn send_btc_locks_inscriptions() {
 
   let (_, reveal) = inscribe(&rpc_server);
 
-  CommandBuilder::new("wallet send --fee-rate 1 bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4 1btc")
+  CommandBuilder::new("wallet send --fee-rate 1 pc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4 1btc")
     .rpc_server(&rpc_server)
     .run_and_deserialize_output::<Output>();
 
@@ -382,7 +382,7 @@ fn send_btc_locks_inscriptions() {
     rpc_server.sent(),
     &[Sent {
       amount: 1.0,
-      address: "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
+      address: "pc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4"
         .parse::<Address<NetworkUnchecked>>()
         .unwrap()
         .assume_checked(),

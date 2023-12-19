@@ -418,7 +418,7 @@ impl Api for Server {
     _include_watchonly: Option<bool>,
   ) -> Result<Value, jsonrpc_core::Error> {
     // Print the ixid to the console
-    println!("get_transaction: {}", txid);
+    // println!("get_transaction: {}", txid);
     match self.state.lock().unwrap().transactions.get(&txid) {
       Some(tx) => Ok(
         serde_json::to_value(GetTransactionResult {
@@ -432,7 +432,7 @@ impl Api for Server {
             blockheight: None,
             blocktime: None,
             wallet_conflicts: Vec::new(),
-            bip125_replaceable: Bip125Replaceable::Unknown,
+            // bip125_replaceable: Bip125Replaceable::Unknown,
           },
           amount: SignedAmount::from_sat(0),
           fee: None,
